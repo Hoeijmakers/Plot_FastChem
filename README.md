@@ -32,6 +32,7 @@ Below is the header of the init method of the FCO object, including an overview 
 2) To run this code, you need to have astropy (<https://www.astropy.org>) installed.
 
 ```python
+        """
         Initialise the FastChem output class used to plot the output of FastChem.
         Parameters
         ----------
@@ -99,4 +100,5 @@ Below is the header of the init method of the FCO object, including an overview 
         self.plot(show==False)
             Re-plot the Figure (after changing the plot parameters for instance).
             set show==True to force plotting the Fig. on-screen, even if outpath is set.
+        """
 ```
