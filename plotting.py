@@ -252,4 +252,4 @@ class FastChem_output(object):
             plt.show()
 
 
-a=FastChem_output('output/chem_output.dat')
+# a=FastChem_output('output/chem_output.dat')
