@@ -1,12 +1,9 @@
 # Plot_FastChem
-This is a little object to read and quickly plot FastChem output. This ReadMe continues to describe the contents of this repo, which form a minimum set of files needed to run this code, which produces graphs of the equilibrium chemistry in astrophysical objects, like the following:
-
+This is a little object to read and quickly plot the chemical abundance profiles produced by FastChem 2. This ReadMe continues to describe the contents of this repo, which form a minimum set of files needed to run this code. The end-product of this code is a graph of the equilibrium chemistry in astrophysical objects, like the following:
 
 ![Chemistry of Kepler-7b](Kepler_7_chemistry.png)
 
-
-First, install and run FastChem (<https://github.com/exoclime/FastChem>). In this example, I ran the FastChem demo for Kepler-7b. This has produced at least two files in the `output/` folder: The abundance profiles (output/chem_output_Kepler-7b.dat), and a file that matches species labels with columns in this file (output/chem_species_map.py).
-
+First, install and run FastChem (<https://github.com/exoclime/FastChem>). In this example, I ran the FastChem demo for Kepler-7b. This has produced at least one in the `output/` folder, containing the abundance profiles (output/chem_output.dat).
 
 
 ## Minimum working example
@@ -14,7 +11,7 @@ Start python, import the FCO object and run it on the output file we wish to plo
 
 ```python
 from plotting import FastChem_output as FCO
-a = FCO('output/chem_output_Kepler-7b.dat')
+a = FCO('output/chem_output.dat')
 ```
 
 This immediately makes and shows a matplotlib figure, with the abundance profiles of iron, CO, water and atomic hydrogen by default, as well as the temperature profile. Having made this object, the user can edit what to plot and where to save the figure, by changing class attributes and exuting class methods of the FCO object `a`:
@@ -28,8 +25,11 @@ a.plot()
 ```
 This first changes the colour of the TP profile to green, then changes its linestyle to solid, then changes the styles of all the abundance profiles to dashed, then provides a path to write the figure to, and finally executes the plotting again.
 
+Below is the header of the init method of the FCO object, including an overview of all the attributes and methods that can be used.
 
-Below is the header of the init method of the FCO object, including an overview of all the attributes and methods that can be used:
+## Notes on compatibility
+1) This code is designed to work with the chemistry output of FastChem 2. It will still work with FastChem 1 (<https://github.com/exoclime/FastChem>), but the species labels will not be formatted properly in the legend.
+2) To run this code, you need to have astropy (<https://www.astropy.org>) installed.
 
 ```python
         """
