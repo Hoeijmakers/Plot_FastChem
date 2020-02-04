@@ -233,7 +233,7 @@ class FastChem_output(object):
         if self.plot_TP == True:
             ax2=ax1.twiny()
             ax2.set_xlabel('T (K)')  # we already handled the x-label with ax1
-            l,=ax2.plot(self.data['T (K)'],P,self.Tstyle,color=self.Tcolor,label='T (K)')
+            l,=ax2.plot(self.data['T (K)'],P,self.Tstyle,color=self.Tcolor,label='T (K)',alpha=1.0)
             lines.append(l)
             plt.gca().invert_yaxis()
         fig.tight_layout()  # otherwise the right y-label is slightly clipped
