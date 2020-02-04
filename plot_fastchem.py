@@ -1,6 +1,10 @@
+
+
+
+
 #This is a script to plot the FastChem output into a spaghettiplot.
 class FastChem_output(object):
-    def __init__(self,p,plot_species=['Fe','C1O1','H2O1','H'],outpath=''):
+    def __init__(self,p,plot_species=['Fe','C1O1','H2O1','H'],outpath='',noshow=False):
         """
         Initialise the FastChem output class used to plot the output of FastChem.
         Parameters
@@ -54,12 +58,20 @@ class FastChem_output(object):
             Matplotlib short-hand line styles (':','-.','--','-') in a list of arbitrary length.
             The species lines to plot will cycle through this list. Set to '-' by default, meaning
             that all lines will be solid.
+        self.labels: list of str
+            Manually set the species labels. You probably need this for making paper-ready figures. If you set a label to '', the line will be ignored in the legend.
+            If you set fewer labels than species, the trailing species will not make it into the legend.
+        self.alpha: list of float
+            Transparency values of lines. Same philosophy as colours and styles.
+        self.linewidth: list of float
+            Line thicknesses.
         self.Tcolor: str
             Matplotlib colour of the temperature profile on the second axis.
         self.Tstyle: str
             Matplotlib short-hand line style for the TP profile.
         self.plot_TP: Bool
             Turn plotting of the TP profile on or off. On by default.
+
 
         Methods
         -------
@@ -115,19 +127,26 @@ class FastChem_output(object):
         self.outpath=outpath#The out path of the figure.
         self.dpi = 400
         self.figsize = (6,4.5)
-        #All colour stuff:
+        #All linestyle stuff:
         self.colors = []#If this has nonzero length, lines will cycle through this list.
         self.styles = ['-']
+        self.labels = []
+        self.alpha = ['1.0']
+        self.linewidth = ['1.0']
+
         self.Tcolor = 'red'
-        #All linestyle stuff:
         self.Tstyle = '--'
         self.plot_TP = True
 
-        self.plot()
+
+        if noshow == False:
+            self.plot()
+
 
     def print_species(self):
         for i in self.species:
             print(i)
+
 
     def resolve_label(self,label):
         import copy
@@ -211,12 +230,25 @@ class FastChem_output(object):
         P = self.data['P (bar)']
         lines=[]
         for i,name in enumerate(self.plot_species):
-            label = self.resolve_label(name)
-            if len(self.colors) == 0:
-                l,=ax1.plot(self.data[name],P,self.styles[i%(len(self.styles))],label=label)
+
+            #Deal with customly set labels.
+            if len(self.labels) == 0:
+                label = self.resolve_label(name)
             else:
-                l,=ax1.plot(self.data[name],P,self.styles[i%(len(self.styles))],label=label,color=self.colors[i%(len(self.colors))])
+                label = 'empty'
+                if i < len(self.labels):#If not, the label is left empty at ''.
+                    label = self.labels[i]
+                    if label == '':
+                        label = 'empty'#This is a placeholder word really.
+
+            #Deal with line colours, styles, thicknesses and transparencies:
+            if len(self.colors) == 0:
+                l,=ax1.plot(self.data[name],P,self.styles[i%(len(self.styles))],label=label,linewidth=self.linewidth[i%(len(self.linewidth))],alpha=self.alpha[i%(len(self.alpha))])
+            else:
+                l,=ax1.plot(self.data[name],P,self.styles[i%(len(self.styles))],label=label,color=self.colors[i%(len(self.colors))],linewidth=self.linewidth[i%(len(self.linewidth))],alpha=self.alpha[i%(len(self.alpha))])
             lines.append(l)
+
+
         ax1.set_yscale('log')
         ax1.set_xscale('log')
 
@@ -242,14 +274,52 @@ class FastChem_output(object):
             lines.append(l)
             plt.gca().invert_yaxis()
         fig.tight_layout()  # otherwise the right y-label is slightly clipped
-        labels = [l.get_label() for l in lines]
-        plt.legend(lines, labels, loc=0)
+
+        #This is for dealing with the empty labels that may have remained:
+        labels_accepted = []
+        lines_accepted = []
+        for l in lines:
+            la = l.get_label()
+            if la != 'empty':
+                labels_accepted.append(la)
+                lines_accepted.append(l)
+        leg = plt.legend(lines_accepted, labels_accepted, loc=0)
         if show == True:#If show == True, always show.
+            self.interactive_legend(fig,ax1,lines,leg)
             plt.show()
         elif len(self.outpath) > 0:#Otherwise, check that the outpath is set, if so, we save.
             plt.savefig(self.outpath,dpi=self.dpi)
         else:#If show == False but the outpath is not set (default), we still show:
+            self.interactive_legend(fig,ax1,lines,leg)
             plt.show()
 
+
+
+
+    def interactive_legend(self,fig,ax,lines,leg):
+        #leg = ax.legend(loc='upper left', fancybox=False, shadow=False)
+        leg.get_frame().set_alpha(0.4)
+# we will set up a dict mapping legend line to orig line, and enable
+# picking on the legend line
+        lined = dict()
+        for legline, origline in zip(leg.get_lines(), lines):
+            legline.set_picker(5)  # 5 pts tolerance
+            lined[legline] = origline
+        def onpick(event):
+    # on the pick event, find the orig line corresponding to the
+    # legend proxy line, and toggle the visibility
+            legline = event.artist
+            origline = lined[legline]
+            vis = not origline.get_visible()
+            origalpha = origline.get_alpha()
+            origline.set_visible(vis)
+    # Change the alpha on the line in the legend so we can see what lines
+    # have been toggled
+            if vis:
+                legline.set_alpha(origalpha)
+            else:
+                legline.set_alpha(origalpha/3.0)
+            fig.canvas.draw()
+        fig.canvas.mpl_connect('pick_event', onpick)
 
 # a=FastChem_output('output/chem_output.dat')
