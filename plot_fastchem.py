@@ -18,6 +18,8 @@ class FastChem_output(object):
         outpath: file path
             Optional outpath of the figure that is going to be plotted. If not set,
             or set to '', no figure will be written, and the plot is shown on screen instead (default).
+        nowhow: Bool
+            Set to true if you want to skip plotting on init, if you plan to call the .plot() method later.
         Returns
         -------
         FastChem_output : `FastChem_output` object
@@ -78,6 +80,8 @@ class FastChem_output(object):
         self.print_species()
             Print the FastChem labels of all available species that can be included
             in plot_species.
+        self.resolve(name)
+            Takes a species name as a string as input (e.g. H2O1), for use in the figure legend.
         self.plot(show==False)
             Re-plot the Figure (after changing the plot parameters for instance).
             set show==True to force plotting the Fig. on-screen, even if outpath is set.
