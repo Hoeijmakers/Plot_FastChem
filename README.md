@@ -10,7 +10,7 @@ First, install and run FastChem (<https://github.com/exoclime/FastChem>). In thi
 Start python, import the FCO object and run it on the output file we wish to plot the chemistry from:
 
 ```python
-from plotting import FastChem_output as FCO
+from plot_fastchem import FastChem_output as FCO
 a = FCO('output/chem_output.dat')
 ```
 
