@@ -1,5 +1,5 @@
 # Plot_FastChem
-This is a little object to read and quickly plot the chemical abundance profiles produced by FastChem 2. This ReadMe continues to describe the contents of this repo, which form a minimum set of files needed to run this code. The end-product of this code is a graph of the equilibrium chemistry in astrophysical objects, like the following:
+This is a little object to read and quickly plot the chemical abundance profiles produced by FastChem. This ReadMe continues to describe the contents of this repo, which form a minimum set of files needed to run this code. The end-product of this code is a graph of the equilibrium chemistry in astrophysical objects, like the following:
 
 ![Chemistry of Kepler-7b](Kepler_7_chemistry.png)
 
@@ -45,6 +45,8 @@ Below is the header of the init method of the FCO object, including an overview 
         outpath: file path
             Optional outpath of the figure that is going to be plotted. If not set,
             or set to '', no figure will be written, and the plot is shown on screen instead (default).
+        nowhow: Bool
+            Set to true if you want to skip plotting on init, if you plan to call the .plot() method later.
         Returns
         -------
         FastChem_output : `FastChem_output` object
@@ -85,6 +87,13 @@ Below is the header of the init method of the FCO object, including an overview 
             Matplotlib short-hand line styles (':','-.','--','-') in a list of arbitrary length.
             The species lines to plot will cycle through this list. Set to '-' by default, meaning
             that all lines will be solid.
+        self.labels: list of str
+            Manually set the species labels. You probably need this for making paper-ready figures. If you set a label to '', the line will be ignored in the legend.
+            If you set fewer labels than species, the trailing species will not make it into the legend.
+        self.alpha: list of float
+            Transparency values of lines. Same philosophy as colours and styles.
+        self.linewidth: list of float
+            Line thicknesses.
         self.Tcolor: str
             Matplotlib colour of the temperature profile on the second axis.
         self.Tstyle: str
@@ -92,11 +101,14 @@ Below is the header of the init method of the FCO object, including an overview 
         self.plot_TP: Bool
             Turn plotting of the TP profile on or off. On by default.
 
+
         Methods
         -------
         self.print_species()
             Print the FastChem labels of all available species that can be included
             in plot_species.
+        self.resolve(name)
+            Takes a species name as a string as input (e.g. H2O1), for use in the figure legend.
         self.plot(show==False)
             Re-plot the Figure (after changing the plot parameters for instance).
             set show==True to force plotting the Fig. on-screen, even if outpath is set.
