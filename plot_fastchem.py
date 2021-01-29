@@ -40,6 +40,11 @@ class FastChem_output(object):
             Maximum x-axis range.
         self.xmax: int,float
             Maximum x-axis range.
+        self.xlabel: str
+            The label of the x-axis. Volume mixing ratio by default.
+        self.ylabel: str
+            The label of the y-axis. P (bar) by default.
+
 
 
         self.outpath: file path
@@ -175,7 +180,7 @@ class FastChem_output(object):
                 outlabel=outlabel.replace('-','$^-$')
             else:
                 outlabel=outlabel.replace('+','')
-                outlabel+=r'{\fontsize{%spt}{3em}\fontfamily{cursif}\selectfont{}{ %s}'%(int(math.floor(self.fontsize*0.85)),(Nion+1)*'I')
+                outlabel+=r'{\fontsize{%s}{3em}\fontfamily{cursif}\selectfont{}{ %s}'%(self.fontsize*0.85,(Nion+1)*'I')
         return(outlabel)
 
 

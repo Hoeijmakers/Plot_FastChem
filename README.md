@@ -20,6 +20,7 @@ This immediately makes and shows a matplotlib figure, with the abundance profile
 a.plot_Tcolor = 'green'
 a.Tstyle = '-'
 a.styles = ['--']
+a.plot_species = ['H','He','Na','K','O1Ti1']
 a.outpath = 'Kepler_7_chemistry.png'
 a.plot()
 ```
@@ -67,6 +68,11 @@ Below is the header of the init method of the FCO object, including an overview 
             Maximum x-axis range.
         self.xmax: int,float
             Maximum x-axis range.
+        self.xlabel: str
+            The label of the x-axis. Volume mixing ratio by default.
+        self.ylabel: str
+            The label of the y-axis. P (bar) by default.
+
 
 
         self.outpath: file path
