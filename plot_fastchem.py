@@ -74,6 +74,8 @@ class FastChem_output(object):
             Line thicknesses.
         self.Tcolor: str
             Matplotlib colour of the temperature profile on the second axis.
+        self.Talpha: float
+            Transparency value of the TP profile.
         self.Tstyle: str
             Matplotlib short-hand line style for the TP profile.
         self.plot_TP: Bool
@@ -143,6 +145,7 @@ class FastChem_output(object):
 
         self.Tcolor = 'red'
         self.Tstyle = '--'
+        self.Talpha = 1.0
         self.plot_TP = True
 
 
@@ -242,7 +245,7 @@ class FastChem_output(object):
         if self.plot_TP == True:
             ax2=ax1.twiny()
             ax2.set_xlabel('T (K)')  # we already handled the x-label with ax1
-            l,=ax2.plot(self.data['T (K)'],P,self.Tstyle,color=self.Tcolor,label='T (K)',alpha=1.0)
+            l,=ax2.plot(self.data['T (K)'],P,self.Tstyle,color=self.Tcolor,label='T (K)',alpha=self.Talpha)
             lines.append(l)
             plt.gca().invert_yaxis()
         fig.tight_layout()  # otherwise the right y-label is slightly clipped

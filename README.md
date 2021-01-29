@@ -107,6 +107,8 @@ Below is the header of the init method of the FCO object, including an overview 
             Line thicknesses.
         self.Tcolor: str
             Matplotlib colour of the temperature profile on the second axis.
+        self.Talpha: float
+            Transparency value of the TP profile.
         self.Tstyle: str
             Matplotlib short-hand line style for the TP profile.
         self.plot_TP: Bool
