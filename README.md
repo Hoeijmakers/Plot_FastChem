@@ -20,11 +20,16 @@ This immediately makes and shows a matplotlib figure, with the abundance profile
 a.plot_Tcolor = 'green'
 a.Tstyle = '-'
 a.styles = ['--']
-a.plot_species = ['H','He','Na','K','O1Ti1']
+a.plot_species=['H','Na','Mg','K','Ca','Fe','O1Ti1']
 a.outpath = 'Kepler_7_chemistry.png'
 a.plot()
 ```
-This first changes the colour of the TP profile to green, then changes its linestyle to solid, then changes the styles of all the abundance profiles to dashed, then provides a path to write the figure to, and finally executes the plotting again.
+This first changes the colour of the TP profile to green, then changes its linestyle to solid, then changes the styles of all the abundance profiles to dashed, then provides a path to write the figure to, and finally executes the plotting again. The labels of some molecules are defined in FastChem in non-conventional orders and are not automatically resolved. These need to be set manually. To set the label of TiO in the above example while retaining the automatic formatting of the other labels, you can add:
+
+```python
+a.labels=[a.resolve(i) for i in ['H','Na','Mg','K','Ca','Fe']]+['TiO']
+a.plot()
+```
 
 Below is the header of the init method of the FCO object, including an overview of all the attributes and methods that can be used.
 
